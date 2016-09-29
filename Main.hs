@@ -19,12 +19,13 @@ testData = (2, 3)
 
 -- | calculates the unique permutations for the input pair
 uniquePermutations :: (Num a, Eq a, Integral a) => (a, a) -> a
-uniquePermutations (0, _) = 0
-uniquePermutations (_, 0) = 0
-uniquePermutations (zeros, ones) = floor $ permutations / duplicates
-   where n = zeros + ones
-         permutations = fromIntegral $ factoral n
-         duplicates   = fromIntegral $ factoral zeros * factoral ones
+uniquePermutations (zeros, ones) 
+  | zeros < 1 = 0
+  | ones < 1  = 0
+  | otherwise = floor $ permutations / duplicates
+     where n = zeros + ones
+           permutations = fromIntegral $ factoral n
+           duplicates   = fromIntegral $ factoral zeros * factoral ones
 
 -- | factoral helper method
 factoral :: (Num a, Integral a, Eq a) => a -> a

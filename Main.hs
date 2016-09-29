@@ -12,7 +12,6 @@
 module Main where
 
 import Control.Monad (replicateM)
-import Data.List.Split (splitOn)
 
 testData :: (Num a) => (a, a)
 testData = (2, 3)
@@ -35,7 +34,7 @@ factoral x = x * factoral (x-1)
 -- | parse string input "2 3" to be the pair (2, 3)
 strToPair :: String -> (Integer, Integer)
 strToPair input = (a, b)
-  where [a, b] = map read $ splitOn " " input :: [Integer]
+  where [a, b] = map read $ words input :: [Integer]
 
 main = do
   numberOfLines <- getLine

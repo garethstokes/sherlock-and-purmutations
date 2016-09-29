@@ -1,3 +1,14 @@
+{- Sherlock and Permutations
+ - -------------------------
+ -
+ - A solution for the problem found here
+ - https://www.hackerrank.com/challenges/sherlock-and-permutations
+ -
+ - A slight twist on the typical permutations problem in that it will
+ - remove duplicate permutations and only return the number of count
+ - of uniques
+ -}
+
 module Main where
 
 import Control.Monad (replicateM)
@@ -10,10 +21,10 @@ testData = (2, 3)
 uniquePermutations :: (Num a, Eq a, Integral a) => (a, a) -> a
 uniquePermutations (0, _) = 0
 uniquePermutations (_, 0) = 0
-uniquePermutations (zeros, ones) = floor $ enumerator / denumerator
+uniquePermutations (zeros, ones) = floor $ permutations / duplicates
    where n = zeros + ones
-         enumerator  = fromIntegral $ factoral n
-         denumerator = fromIntegral $ factoral zeros * factoral ones
+         permutations = fromIntegral $ factoral n
+         duplicates   = fromIntegral $ factoral zeros * factoral ones
 
 -- | factoral helper method
 factoral :: (Num a, Integral a, Eq a) => a -> a

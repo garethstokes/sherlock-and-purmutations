@@ -19,8 +19,14 @@ testData = (2, 3)
 -- | calculates the unique permutations for the input pair
 uniquePermutations :: (Num a, Eq a, Integral a) => (a, a) -> a
 uniquePermutations (zeros, ones) 
-  | zeros < 1 = 0
-  | ones < 1  = 0
+  -- only deal with positive inputs
+  | zeros < 1 = 0 
+  | ones  < 0 = 0
+
+  -- unique starting with 1
+  | ones == 0 = 1
+
+  -- unque permutations: n! / duplicates!
   | otherwise = floor $ permutations / duplicates
      where n = zeros + ones
            permutations = fromIntegral $ factoral n
@@ -36,7 +42,10 @@ strToPair :: String -> (Integer, Integer)
 strToPair input = (a, b)
   where [a, b] = map read $ words input :: [Integer]
 
+removeOneFromPair :: (Integer, Integer) -> (Integer, Integer)
+removeOneFromPair (x, y) = (x, y-1)
+
 main = do
   numberOfLines <- getLine
   lines <- replicateM (read numberOfLines) getLine
-  putStr $ unlines $ map (show . uniquePermutations . strToPair) lines
+  putStr $ unlines $ map (show . uniquePermutations . removeOneFromPair . strToPair) lines

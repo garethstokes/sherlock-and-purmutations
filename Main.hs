@@ -7,6 +7,11 @@
  - A slight twist on the typical permutations problem in that it will
  - remove duplicate permutations and only return the number of count
  - of uniques
+ -
+ - special help to this article for information about modulo 
+ - mathematics
+ -
+ - https://codeaccepted.wordpress.com/2014/02/15/output-the-answer-modulo-109-7/
  -}
 
 module Main where

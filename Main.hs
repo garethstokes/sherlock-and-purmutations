@@ -21,31 +21,45 @@ uniquePermutations :: (Num a, Eq a, Integral a) => (a, a) -> a
 uniquePermutations (zeros, ones) 
   -- only deal with positive inputs
   | zeros < 1 = 0 
-  | ones  < 0 = 0
+  | ones  < 1 = 0
 
   -- unique starting with 1
-  | ones == 0 = 1
+  | ones == 1 = 1
 
   -- unque permutations: n! / duplicates!
-  | otherwise = floor $ permutations / duplicates
-     where n = zeros + ones
-           permutations = fromIntegral $ factoral n
-           duplicates   = fromIntegral $ factoral zeros * factoral ones
+  | otherwise = (permutations * littleFermat duplicates prime) `mod` prime
+     where n = (zeros + ones - 1) `mod` prime
+           permutations = factoral n `mod` prime
+           duplicates   = factoral zeros `mod` prime * factoral (ones - 1) `mod` prime `mod` prime
+
+prime :: (Integral a) => a
+prime = 1000000007
+
+-- | fast power function
+-- complexity of O(log p) much faster than using ^
+fastPow :: (Integral a) => a -> a -> a -> a
+fastPow base 0 _ = 1
+fastPow base 1 _ = base
+fastPow base pow m 
+  | even pow = mod ((fastPow base (div pow 2) m) ^ 2) m
+  | odd  pow = mod ((fastPow base (div (pow-1) 2) m) ^ 2 * base) m
+
+-- | fermats little theorem 
+-- p must be a prime number larger than a
+littleFermat :: (Integral a) => a -> a -> a
+littleFermat a p = fastPow a (p - 2) p
 
 -- | factoral helper method
 factoral :: (Num a, Integral a, Eq a) => a -> a
 factoral 1 = 1
-factoral x = x * factoral (x-1)
+factoral x = x * factoral (x-1) `mod` prime
 
 -- | parse string input "2 3" to be the pair (2, 3)
 strToPair :: String -> (Integer, Integer)
 strToPair input = (a, b)
   where [a, b] = map read $ words input :: [Integer]
 
-removeOneFromPair :: (Integer, Integer) -> (Integer, Integer)
-removeOneFromPair (x, y) = (x, y-1)
-
 main = do
   numberOfLines <- getLine
   lines <- replicateM (read numberOfLines) getLine
-  putStr $ unlines $ map (show . uniquePermutations . removeOneFromPair . strToPair) lines
+  putStr $ unlines $ map (show . uniquePermutations . strToPair) lines
